@@ -1,0 +1,30 @@
+﻿@model Doctor
+<div class="container my-4">
+    <form action="/Admin/Doctor/Delete" method="POST" class="bg-light p-4 rounded shadow-sm">
+        <h4 class="mb-3 text-danger">Confirm Deletion</h4>
+        <p class="text-muted">Are you sure you want to delete the following doctor?</p>
+
+        <div class="row g-3 mb-4">
+            <div class="col-md-6">
+                <label for="doctorId" class="form-label fw-bold">Doctor ID:</label>
+                <input type="hidden" id="doctorId" name="doctorId" value="@Model.Id">
+                <input type="text" class="form-control" readonly value="@Model.Id">
+            </div>
+            <div class="col-md-6">
+                <label for="name" class="form-label fw-bold">Name:</label>
+                <input type="text" id="name" name="name" class="form-control" readonly value="@Model.Name">
+            </div>
+            <div class="col-md-6">
+                <label for="departmentId" class="form-label fw-bold">Department ID:</label>
+                <input type="text" id="departmentId" name="departmentId" class="form-control" readonly value="@Model.DepartmentId">
+            </div>
+        </div>
+
+        <div class="d-flex gap-3">
+            <button type="submit" class="btn btn-danger btn-lg px-4" onclick="return confirm('Are you sure you want to delete this doctor?');">
+                Delete
+            </button>
+            <a href="/Admin/Doctor" class="btn btn-secondary btn-lg px-4">Cancel</a>
+        </div>
+    </form>
+</div>

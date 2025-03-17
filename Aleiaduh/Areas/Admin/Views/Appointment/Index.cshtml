@@ -1,0 +1,31 @@
+﻿@{
+    ViewData["Title"] = "Appointments";
+}
+
+<h2>Appointments</h2>
+
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>Patient Id</th>
+            <th>Doctor Id</th>
+            <th>Appointment Date</th>
+            <th>Status</th>
+            <th>Description</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var appointment in Model)
+        {
+            <tr>
+                <td>@appointment.Id</td>
+                <td>@appointment.PatientId</td>
+                <td>@appointment.DoctorId</td>
+                <td>@appointment.AppointmentDate.ToString("yyyy-MM-dd HH:mm")</td>
+                <td>@appointment.Status</td>
+                <td>@appointment.Description</td>
+            </tr>
+        }
+    </tbody>
+</table>

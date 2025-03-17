@@ -4,8 +4,9 @@ using Aleiaduh.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
-namespace Aleiaduh.Controllers
+namespace Aleiaduh.Areas.User.Controllers
 {
+    [Area("User")]
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
@@ -18,10 +19,10 @@ namespace Aleiaduh.Controllers
         public IActionResult Index()
         {
             var doctors = dbContext.Doctors.Include(d => d.Department);
-            //var details = new
-            //{
-                
-            //};
+            var details = new
+            {
+                Doctors=doctors,
+            };
             return View(doctors);
         }
         public IActionResult About()
@@ -37,9 +38,11 @@ namespace Aleiaduh.Controllers
             var doctors = dbContext.Doctors.Include(d=>d.Department);
             return View(doctors.ToList());
         }
-        public IActionResult Appointment()
+        public IActionResult Appointment(string? DoctorName)
         {
-            return View();
+            var doctors = dbContext.Doctors.ToList();
+
+            return View(doctors);
         }
         public IActionResult NotFoundPage()
         {

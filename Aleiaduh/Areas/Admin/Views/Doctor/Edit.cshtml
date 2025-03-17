@@ -1,0 +1,116 @@
+﻿@model Doctor
+<div class="container my-4">
+    <!-- Sticky Heading Row -->
+    <div class="row mb-4 g-3 align-items-center sticky-top bg-white py-3 shadow-sm">
+        <div class="col-12 col-md-8">
+            <h2 class="mb-0"><i class="bi bi-person-lines-fill"></i> Update @Model.Name's Information</h2>
+        </div>
+        <div class="col-12 col-md-4 d-flex justify-content-md-end gap-3">
+            <button class="btn btn-outline-secondary" onclick="history.back()">
+                <i class="bi bi-arrow-left"></i> Back
+            </button>
+        </div>
+    </div>
+
+    <!-- Form -->
+    <form action="/Admin/Doctor/Edit" method="POST" class="p-4 bg-light rounded shadow-sm">
+        <input type="hidden" id="doctorId" name="doctorId" value="@Model.Id">
+
+        <!-- Personal Information -->
+        <div class="card mb-4">
+            <div class="card-header bg-primary text-white">
+                <h4 class="mb-0"><i class="bi bi-person-badge"></i> Personal Information</h4>
+            </div>
+            <div class="card-body">
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <label for="name" class="form-label fw-bold">Name:</label>
+                        <input type="text" id="name" name="name" class="form-control" required value="@Model.Name">
+                    </div>
+                    <div class="col-md-6">
+                        <label for="department_id" class="form-label fw-bold">Department:</label>
+                        <div class="input-group">
+                            <span class="input-group-text"><i class="bi bi-building"></i></span>
+                            <select id="department_id" name="DepartmentId" class="form-select" required>
+                                <option value="">Select a department</option>
+                                @foreach (var item in ViewBag.Departments)
+                                {
+                                    <option value="@item.Id">@item.Name</option>
+                                }
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Contact Information -->
+        <div class="card mb-4">
+            <div class="card-header bg-secondary text-white">
+                <h4 class="mb-0"><i class="bi bi-envelope"></i> Contact Information</h4>
+            </div>
+            <div class="card-body">
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <label for="email" class="form-label fw-bold">Email:</label>
+                        <input type="email" id="email" name="Email" class="form-control" required value="@Model?.Email">
+                    </div>
+                    <div class="col-md-6">
+                        <label for="phone" class="form-label fw-bold">Phone:</label>
+                        <input type="tel" id="phone" name="phone" class="form-control" required value="@Model.Phone">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Social Media -->
+        <div class="card mb-4">
+            <div class="card-header bg-info text-white">
+                <h4 class="mb-0"><i class="bi bi-share"></i> Social Media Profiles</h4>
+            </div>
+            <div class="card-body">
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <label for="image_url" class="form-label fw-bold">Image URL:</label>
+                        <input type="text" id="image_url" name="imageURL" class="form-control" value="@Model.ImageURL" oninput="updateImagePreview()">
+                        <div class="text-center mt-2">
+                            <img id="imagePreview" src="@Model.ImageURL" alt="Doctor Image" class="rounded-circle shadow-sm" style="width: 100px; height: 100px; object-fit: cover;">
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="facebook_url" class="form-label fw-bold">Facebook URL:</label>
+                        <input type="url" id="facebook_url" name="facebookURL" class="form-control" value="@Model.FacebookURL">
+                    </div>
+                    <div class="col-md-6">
+                        <label for="twitter_url" class="form-label fw-bold">Twitter URL:</label>
+                        <input type="url" id="twitter_url" name="twitter_url" class="form-control" value="@Model.TwitterURL">
+                    </div>
+                    <div class="col-md-6">
+                        <label for="instagram_url" class="form-label fw-bold">Instagram URL:</label>
+                        <input type="url" id="instagram_url" name="instagramURL" class="form-control" value="@Model.InstagramURL">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Form Buttons -->
+        <div class="d-flex gap-3">
+            <button type="submit" class="btn btn-primary btn-lg px-4">
+                <i class="bi bi-save"></i> Update
+            </button>
+            <button type="reset" class="btn btn-danger btn-lg px-4">
+                <i class="bi bi-x-circle"></i> Reset
+            </button>
+        </div>
+    </form>
+</div>
+
+<script>
+    function updateImagePreview() {
+        var input = document.getElementById('image_url');
+        var img = document.getElementById('imagePreview');
+        img.src = input.value || 'https://via.placeholder.com/100';
+    }
+</script>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
