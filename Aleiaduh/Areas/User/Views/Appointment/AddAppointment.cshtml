@@ -1,39 +1,47 @@
 ﻿@model Appointment
 
-<form action="/User/appointment/addappointment" method="post" class="container mt-4 p-4 border rounded shadow bg-light">
-    <h2 class="text-center mb-4">Add Appointment</h2>
+<form action="/User/appointment/addappointment" method="post" class="container mt-5 p-5 border rounded shadow bg-light">
+    <h2 class="text-center mb-4 text-primary">Add Appointment</h2>
 
+    <!-- Patient ID -->
     <div class="mb-3">
-        <label for="patientId" class="form-label">Patient ID</label>
-        <input type="text" id="patientId" name="PatientId" class="form-control" required />
-    </div>
-
-    <div class="mb-3">
-        <label for="doctorId" class="form-label">Doctor ID</label>
-        <input type="text" id="doctorId" name="DoctorId" class="form-control" required />
-    </div>
-
-    <div class="mb-3">
-        <label for="appointmentDate" class="form-label">Appointment Date</label>
-        <input type="datetime-local" id="appointmentDate" name="AppointmentDate" class="form-control" required />
-    </div>
-
-    <div class="mb-3">
-        <label for="status" class="form-label">Status</label>
-        <select id="status" name="Status" class="form-select" required>
-            <option value="" disabled selected>Select Status</option>
-            <option value="Pending">Pending</option>
-            <option value="Confirmed">Confirmed</option>
-            <option value="Cancelled">Cancelled</option>
+        <label for="patientId" class="form-label fw-bold">Patient<span class="text-danger">*</span></label>
+        <select id="patientId" name="PatientId" class="form-select" required data-bs-toggle="tooltip" data-bs-placement="top" title="Select the patient for this appointment">
+            <option value="" disabled selected>Select a Patient</option>
+            @foreach (var item in ViewBag.Patients)
+            {
+                <option value="@item.Id">@item.Name</option>
+            }
         </select>
     </div>
 
+    <!-- Doctor ID -->
     <div class="mb-3">
-        <label for="description" class="form-label">Description</label>
-        <textarea id="description" name="Description" class="form-control" rows="3"></textarea>
+        <label for="doctorId" class="form-label fw-bold">Doctor<span class="text-danger">*</span></label>
+        <select id="doctorId" name="DoctorId" class="form-select" required data-bs-toggle="tooltip" data-bs-placement="top" title="Select the doctor for this appointment">
+            <option value="" disabled selected>Select a Doctor</option>
+            @foreach (var item in ViewBag.Doctors)
+            {
+                <option value="@item.Id">@item.Name</option>
+            }
+        </select>
     </div>
 
-    <div class="text-center">
-        <button type="submit" class="btn btn-primary px-4">Submit</button>
+    <!-- Appointment Date -->
+    <div class="mb-3">
+        <label for="appointmentDate" class="form-label fw-bold">Appointment Date & Time<span class="text-danger">*</span></label>
+        <input type="datetime-local" id="appointmentDate" name="AppointmentDate" class="form-control" required />
+    </div>
+
+    <!-- Description -->
+    <div class="mb-3">
+        <label for="description" class="form-label fw-bold">Description</label>
+        <textarea id="description" name="Description" class="form-control" rows="4" placeholder="Provide details about the appointment"></textarea>
+    </div>
+
+    <!-- Submit Button -->
+    <div class="text-center mt-4">
+        <button type="submit" class="btn btn-primary btn-lg px-5">Submit</button>
+        <button type="reset" class="btn btn-secondary btn-lg ms-3 px-5">Reset</button>
     </div>
 </form>

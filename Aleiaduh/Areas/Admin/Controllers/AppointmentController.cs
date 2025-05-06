@@ -1,5 +1,7 @@
 ﻿using Aleiaduh.DataAccess;
 using Aleiaduh.Models;
+using Aleiaduh.Repositories;
+using Aleiaduh.Repositories.IRepositories;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Aleiaduh.Areas.Admin.Controllers
@@ -7,12 +9,19 @@ namespace Aleiaduh.Areas.Admin.Controllers
     [Area("Admin")]
     public class AppointmentController : Controller
     {
-        ApplicationDbContext dbContext = new ApplicationDbContext();
-        public IActionResult Index()
+        private readonly IAppointmentRepository appointmentRepository;
+        private readonly ApplicationDbContext applicationDbContext;
+
+        public AppointmentController(IAppointmentRepository appointmentRepository, ApplicationDbContext applicationDbContext)
         {
-            var appointments = dbContext.Appointments;
-            return View(appointments.ToList());
+            this.appointmentRepository = appointmentRepository;
+            this.applicationDbContext = applicationDbContext;
         }
 
+        public IActionResult Index()
+        {
+            var appointments = appointmentRepository.Get();
+            return View(appointments.ToList());
+        }
     }
 }

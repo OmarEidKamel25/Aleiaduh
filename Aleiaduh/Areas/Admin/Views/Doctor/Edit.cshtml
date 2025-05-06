@@ -13,8 +13,8 @@
     </div>
 
     <!-- Form -->
-    <form action="/Admin/Doctor/Edit" method="POST" class="p-4 bg-light rounded shadow-sm">
-        <input type="hidden" id="doctorId" name="doctorId" value="@Model.Id">
+    <form  asp-controller="Doctor" asp-action="Edit" asp-area="Admin" method="POST" enctype="multipart/form-data" class="p-4 bg-light rounded shadow-sm">
+        <input type="hidden" id="DoctorId" name="Id" value="@Model.Id">
 
         <!-- Personal Information -->
         <div class="card mb-4">
@@ -25,7 +25,8 @@
                 <div class="row g-3">
                     <div class="col-md-6">
                         <label for="name" class="form-label fw-bold">Name:</label>
-                        <input type="text" id="name" name="name" class="form-control" required value="@Model.Name">
+                        <input type="text" id="name" name="Name" class="form-control" required value="@Model.Name">
+                        <span asp-validation-for="Name" class="text-danger"></span>
                     </div>
                     <div class="col-md-6">
                         <label for="department_id" class="form-label fw-bold">Department:</label>
@@ -35,7 +36,9 @@
                                 <option value="">Select a department</option>
                                 @foreach (var item in ViewBag.Departments)
                                 {
-                                    <option value="@item.Id">@item.Name</option>
+                                    <option value="@item.Id" selected="@(item.Id == Model.DepartmentId ? "selected" : null)">
+                                        @item.Name
+                                    </option>
                                 }
                             </select>
                         </div>
@@ -53,41 +56,48 @@
                 <div class="row g-3">
                     <div class="col-md-6">
                         <label for="email" class="form-label fw-bold">Email:</label>
-                        <input type="email" id="email" name="Email" class="form-control" required value="@Model?.Email">
+                        <input type="email" id="Email" name="Email" class="form-control" required value="@Model?.Email">
+                        <span asp-validation-for="Name" class="text-danger"></span>
                     </div>
                     <div class="col-md-6">
                         <label for="phone" class="form-label fw-bold">Phone:</label>
-                        <input type="tel" id="phone" name="phone" class="form-control" required value="@Model.Phone">
+                        <input type="tel" id="phone" name="Phone" class="form-control" required value="@Model.Phone">
+                        <span asp-validation-for="Name" class="text-danger"></span>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- Social Media -->
+        <!-- Social Media Links and Image Upload -->
         <div class="card mb-4">
             <div class="card-header bg-info text-white">
-                <h4 class="mb-0"><i class="bi bi-share"></i> Social Media Profiles</h4>
+                <h4 class="mb-0"><i class="bi bi-share"></i> Social Media Profiles & Image Upload</h4>
             </div>
             <div class="card-body">
                 <div class="row g-3">
                     <div class="col-md-6">
-                        <label for="image_url" class="form-label fw-bold">Image URL:</label>
-                        <input type="text" id="image_url" name="imageURL" class="form-control" value="@Model.ImageURL" oninput="updateImagePreview()">
+                        <label for="image_upload" class="form-label fw-bold">Upload Image:</label>
+                        <input type="file" id="image_upload" name="file" class="form-control" accept="image/*">
                         <div class="text-center mt-2">
-                            <img id="imagePreview" src="@Model.ImageURL" alt="Doctor Image" class="rounded-circle shadow-sm" style="width: 100px; height: 100px; object-fit: cover;">
-                        </div>
+                            <img id="imagePreview" src="~/img/@Model.ImageURL" alt="Doctor Image"
+                                 class="btn-square shadow-sm" style="width: 20%; height: auto; object-fit: cover;">
+                            <span asp-validation-for="Name" class="text-danger"></span>
+                             </div>
                     </div>
                     <div class="col-md-6">
                         <label for="facebook_url" class="form-label fw-bold">Facebook URL:</label>
-                        <input type="url" id="facebook_url" name="facebookURL" class="form-control" value="@Model.FacebookURL">
+                        <input type="url" id="facebook_url" name="FacebookURL" class="form-control" value="@Model.FacebookURL">
+                        <span asp-validation-for="Name" class="text-danger"></span>
                     </div>
                     <div class="col-md-6">
                         <label for="twitter_url" class="form-label fw-bold">Twitter URL:</label>
-                        <input type="url" id="twitter_url" name="twitter_url" class="form-control" value="@Model.TwitterURL">
+                        <input type="url" id="twitter_url" name="TwitterURL" class="form-control" value="@Model.TwitterURL">
+                        <span asp-validation-for="Name" class="text-danger"></span>
                     </div>
                     <div class="col-md-6">
                         <label for="instagram_url" class="form-label fw-bold">Instagram URL:</label>
-                        <input type="url" id="instagram_url" name="instagramURL" class="form-control" value="@Model.InstagramURL">
+                        <input type="url" id="instagram_url" name="InstagramURL" class="form-control" value="@Model.InstagramURL">
+                        <span asp-validation-for="Name" class="text-danger"></span>
                     </div>
                 </div>
             </div>
@@ -105,12 +115,19 @@
     </form>
 </div>
 
-<script>
-    function updateImagePreview() {
-        var input = document.getElementById('image_url');
-        var img = document.getElementById('imagePreview');
-        img.src = input.value || 'https://via.placeholder.com/100';
-    }
-</script>
-
+<!-- Bootstrap Icons -->
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+<!-- JavaScript for Image Preview -->
+<script>
+    document.getElementById('image_upload').addEventListener('change', function(event) {
+        const file = event.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                document.getElementById('imagePreview').src = e.target.result;
+            };
+            reader.readAsDataURL(file);
+        }
+    });
+</script>

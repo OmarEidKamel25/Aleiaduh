@@ -10,15 +10,17 @@ namespace Aleiaduh.Areas.User.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
-        ApplicationDbContext dbContext = new ApplicationDbContext();
-        public HomeController(ILogger<HomeController> logger)
+        private readonly ApplicationDbContext applicationDbContext;
+        //ApplicationDbContext dbContext = new ApplicationDbContext();
+        public HomeController(ILogger<HomeController> logger,ApplicationDbContext applicationDbContext)
         {
             _logger = logger;
+            this.applicationDbContext = applicationDbContext;
         }
 
         public IActionResult Index()
         {
-            var doctors = dbContext.Doctors.Include(d => d.Department);
+            var doctors = applicationDbContext.Doctors.Include(d => d.Department);
             var details = new
             {
                 Doctors=doctors,
@@ -35,12 +37,12 @@ namespace Aleiaduh.Areas.User.Controllers
         }
         public IActionResult Team()
         {
-            var doctors = dbContext.Doctors.Include(d=>d.Department);
+            var doctors = applicationDbContext.Doctors.Include(d=>d.Department);
             return View(doctors.ToList());
         }
         public IActionResult Appointment(string? DoctorName)
         {
-            var doctors = dbContext.Doctors.ToList();
+            var doctors = applicationDbContext.Doctors.ToList();
 
             return View(doctors);
         }

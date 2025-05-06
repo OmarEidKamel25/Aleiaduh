@@ -4,28 +4,31 @@
         <div class="card-header bg-dark text-white border-bottom border-secondary py-3">
             <h4 class="mb-0 fw-bold text-uppercase animate__animated animate__fadeInDown">All Doctors</h4>
         </div>
-        <div class="card-body bg-dark text-white p-4">
+        <div class="card-body p-4 bg-dark text-white">
+
             <!-- Button Row and Search -->
-            <div class="row mb-4 g-3 align-items-center">
-                <div class="col-12 col-md-6 col-lg-4">
+            <div class="row mb-4 gy-3 align-items-center">
+                <div class="col-md-6 col-lg-4">
                     <div class="input-group shadow-sm rounded-pill overflow-hidden transition-all">
                         <span class="input-group-text bg-dark text-white border-0">
                             <i class="bi bi-search animate__animated animate__pulse animate__infinite"></i>
                         </span>
                         <input type="text"
-                               class="form-control bg-dark text-white border-0 shadow-none transition-all"
-                               id="searchInput"
-                               placeholder="Search by name or department">
+                        class="form-control bg-dark text-white border-0 shadow-none"
+                        id="searchInput"
+                        placeholder="Search by name or department">
                         <button class="btn btn-secondary border-0 px-4 transition-all hover-scale"
-                                type="button"
-                                onclick="clearSearch()">
+                        type="button"
+                        onclick="clearSearch()">
                             Clear
                         </button>
                     </div>
                 </div>
-                <div class="col-12 col-md-6 col-lg-8 d-flex justify-content-end">
+                <div class="col-md-6 col-lg-8 text-md-end">
                     <a href="/Admin/Doctor/Create"
-                       class="btn btn-primary px-4 py-2 shadow-sm transition-all hover-scale animate__animated animate__bounceIn">Create New</a>
+                    class="btn btn-primary px-4 py-2 shadow-sm transition-all hover-scale animate__animated animate__bounceIn w-100 w-md-auto">
+                        Create New
+                    </a>
                 </div>
             </div>
 
@@ -48,12 +51,12 @@
                                 <td>@item.Name</td>
                                 <td>@item.Department.Name</td>
                                 <td class="bg-secondary">
-                                    <div class="d-flex gap-2 justify-content-center">
+                                    <div class="d-flex gap-2 justify-content-center flex-wrap">
                                         <a href="/admin/doctor/edit?doctorId=@item.Id"
-                                           class="btn btn-warning btn-sm flex-grow-1 transition-all hover-scale">Edit</a>
+                                        class="btn btn-warning btn-sm transition-all hover-scale">Edit</a>
                                         <a href="javascript:void(0);"
-                                           onclick="confirmDelete(@item.Id)"
-                                           class="btn btn-danger btn-sm flex-grow-1 transition-all hover-scale">Delete</a>
+                                        onclick="confirmDelete(@item.Id)"
+                                        class="btn btn-danger btn-sm transition-all hover-scale">Delete</a>
                                     </div>
                                 </td>
                             </tr>
@@ -65,91 +68,35 @@
     </div>
 </div>
 
-@section Styles {
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
-    <style>
-        .transition-all {
-            transition: all 0.3s ease;
-        }
-
-        .hover-scale:hover {
-            transform: scale(1.05);
-            box-shadow: 0 5px 15px rgba(0,0,0,0.3) !important;
-        }
-
-        .hover-lift:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 20px rgba(0,0,0,0.2);
-        }
-
-        .table-dark tbody tr:hover {
-            background-color: rgba(255,255,255,0.05);
-        }
-
-        .btn:hover {
-            filter: brightness(110%);
-        }
-
-        .card {
-            border-radius: 15px;
-            overflow: hidden;
-        }
-    </style>
-}
-
-@section Scripts {
-    <!-- Include SweetAlert2 -->
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<!-- SweetAlert2 Delete Confirmation Script -->
+@section Scripts{
+    @* @if (@TempData["Notification"] != null) *@
+    @* { *@
+    <script>
+        toastr.success('@Context.Request.Cookies["Notify"]')
+    </script>
+    @* } *@
     <script>
         function confirmDelete(doctorId) {
             Swal.fire({
-                title: "Are you sure?",
+                title: 'Are you sure?',
                 text: "This action cannot be undone!",
-                icon: "warning",
+                icon: 'warning',
                 showCancelButton: true,
-                confirmButtonColor: "#d33",
-                cancelButtonColor: "#3085d6",
-                confirmButtonText: "Yes, delete it!",
-                cancelButtonText: "Cancel",
-                background: '#1a1a1a',
-                color: '#fff'
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#6c757d',
+                confirmButtonText: 'Yes, delete it!',
+                cancelButtonText: 'Cancel'
             }).then((result) => {
                 if (result.isConfirmed) {
+                    // Redirect to delete action
                     window.location.href = `/admin/doctor/delete?doctorId=${doctorId}`;
                 } else {
-                    Swal.fire("Cancelled", "The doctor record was not deleted.", "info");
+                    // Custom action when cancelled
+                    console.log("Deletion cancelled for ID:", doctorId);
+                    // You can call a function or show a toast here
                 }
             });
-        }
-
-        // Search functionality
-        document.getElementById('searchInput').addEventListener('keyup', function() {
-            let searchValue = this.value.toLowerCase();
-            let table = document.getElementById('doctorsTable');
-            let rows = table.getElementsByTagName('tr');
-
-            for (let i = 1; i < rows.length; i++) {
-                let name = rows[i].getElementsByTagName('td')[1].textContent.toLowerCase();
-                let department = rows[i].getElementsByTagName('td')[2].textContent.toLowerCase();
-
-                if (name.includes(searchValue) || department.includes(searchValue)) {
-                    rows[i].style.display = '';
-                } else {
-                    rows[i].style.display = 'none';
-                }
-            }
-        });
-
-        function clearSearch() {
-            let searchInput = document.getElementById('searchInput');
-            searchInput.value = '';
-            let table = document.getElementById('doctorsTable');
-            let rows = table.getElementsByTagName('tr');
-
-            for (let i = 1; i < rows.length; i++) {
-                rows[i].style.display = '';
-            }
-            searchInput.focus();
         }
     </script>
 }
